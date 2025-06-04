@@ -86,6 +86,10 @@ class OSG_BASE_DLLMAPPING Line
     
     bool  operator ==(const Line &rhs) const;
     bool  operator !=(const Line &rhs) const;
+
+    bool  equals     (const Line &rhs, 
+                      Real32 tolerance = 
+                            TypeTraits<OSG::Real32>::getDefaultEps()) const;
     
     Line &operator = (const Line &rhs);
     
@@ -125,7 +129,8 @@ class OSG_BASE_DLLMAPPING Line
     /*! \{                                                                 */
 
     const Pnt3f &getPosition (void) const; 
-    const Vec3f &getDirection(void) const; 
+    const Vec3f &getDirection(void) const;
+          Pnt3f  getPoint    (Real32 t) const;
 
     /*! \}                                                                 */
     /*---------------------------------------------------------------------*/

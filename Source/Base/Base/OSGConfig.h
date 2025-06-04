@@ -221,6 +221,13 @@
 #     endif
 # endif
 
+# if __GNUC__ >= 8
+#  define OSG_THROW(X) 
+# else
+#  define OSG_THROW(X) throw(X)
+# endif
+# else // __GNUC__
+#  define OSG_THROW(X) throw(X)
 # endif
 
 
@@ -625,7 +632,10 @@
  
 # define OSG_TMPL_STATIC_MEMBER_NEEDS_CLASS_INSTANTIATION
 
-//# define OSG_STATIC_MEMEBER_NEEDS_COPY_ASIGN_INIT
+# if _MSC_VER >= 1910
+#  define OSG_STATIC_MEMEBER_NEEDS_COPY_ASIGN_INIT 1
+#  define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE 1
+# endif
 
 # define OSG_MICROSOFT_DOTNET_COMPILER_HACKS
 

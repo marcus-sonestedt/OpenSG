@@ -102,6 +102,14 @@ PointerType FieldTraits<AlgorithmComputeElement *, nsOSG>::_type(
 
 OSG_FIELDTRAITS_GETTYPE_NS(AlgorithmComputeElement *, nsOSG)
 
+OSG_EXPORT_PTR_SFIELD_FULL(PointerSField,
+                           AlgorithmComputeElement *,
+                           nsOSG)
+
+OSG_EXPORT_PTR_MFIELD_FULL(PointerMField,
+                           AlgorithmComputeElement *,
+                           nsOSG)
+
 /***************************************************************************\
  *                         Field Description                               *
 \***************************************************************************/
@@ -133,7 +141,8 @@ AlgorithmComputeElementBase::TypeObject AlgorithmComputeElementBase::_type(
     reinterpret_cast<PrototypeCreateF>(&AlgorithmComputeElementBase::createEmptyLocal),
     reinterpret_cast<InitContainerF>(&AlgorithmComputeElement::initMethod),
     reinterpret_cast<ExitContainerF>(&AlgorithmComputeElement::exitMethod),
-    reinterpret_cast<InitalInsertDescFunc>(&AlgorithmComputeElement::classDescInserter),
+    reinterpret_cast<InitalInsertDescFunc>(
+        reinterpret_cast<void *>(&AlgorithmComputeElement::classDescInserter)),
     false,
     0,
     "<?xml version=\"1.0\"?>\n"
@@ -142,7 +151,7 @@ AlgorithmComputeElementBase::TypeObject AlgorithmComputeElementBase::_type(
     "   name=\"AlgorithmComputeElement\"\n"
     "   parent=\"ComputeElement\"\n"
     "   library=\"ContribComputeBase\"\n"
-    "   pointerfieldtypes=\"none\"\n"
+    "   pointerfieldtypes=\"both\"\n"
     "   structure=\"concrete\"\n"
     "   systemcomponent=\"true\"\n"
     "   parentsystemcomponent=\"true\"\n"

@@ -152,7 +152,7 @@ OSG_BEGIN_NAMESPACE
 #if !defined(OSG_DO_DOC) || defined(OSG_DOC_DEV)
 PointerType FieldTraits<ShaderStorageBufferObjChunk *, nsOSG>::_type(
     "ShaderStorageBufferObjChunkPtr", 
-    "StateChunkPtr", 
+    "ShaderStorageBufferObjBaseChunkPtr", 
     ShaderStorageBufferObjChunk::getClassType(),
     nsOSG);
 #endif
@@ -358,14 +358,15 @@ ShaderStorageBufferObjChunkBase::TypeObject ShaderStorageBufferObjChunkBase::_ty
     reinterpret_cast<PrototypeCreateF>(&ShaderStorageBufferObjChunkBase::createEmptyLocal),
     reinterpret_cast<InitContainerF>(&ShaderStorageBufferObjChunk::initMethod),
     reinterpret_cast<ExitContainerF>(&ShaderStorageBufferObjChunk::exitMethod),
-    reinterpret_cast<InitalInsertDescFunc>(&ShaderStorageBufferObjChunk::classDescInserter),
+    reinterpret_cast<InitalInsertDescFunc>(
+        reinterpret_cast<void *>(&ShaderStorageBufferObjChunk::classDescInserter)),
     false,
     0,
     "<?xml version=\"1.0\"?>\n"
     "\n"
     "<FieldContainer\n"
     "    name=\"ShaderStorageBufferObjChunk\"\n"
-    "    parent=\"StateChunk\"\n"
+    "    parent=\"ShaderStorageBufferObjBaseChunk\"\n"
     "    library=\"System\"\n"
     "    pointerfieldtypes=\"both\"\n"
     "    structure=\"concrete\"\n"

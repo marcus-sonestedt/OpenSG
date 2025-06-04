@@ -50,6 +50,12 @@ const Pnt3f &Line::getPosition(void) const
     return _pos;
 }
 
+inline
+Pnt3f Line::getPoint(Real32 t) const
+{
+    return _pos + t * _dir;
+}
+
 /*! Accessors for direction
  */
 
@@ -63,6 +69,20 @@ inline
 bool Line::operator !=(const Line &rhs) const
 {
     return !(*this == rhs);
+}
+
+inline
+bool Line::equals(const Line &rhs, Real32 tolerance) const
+{
+    return (
+                _pos.equals(rhs._pos, tolerance) && 
+                _dir.equals(rhs._dir, tolerance)
+           )
+           || 
+           (
+                _pos.equals(rhs._pos + rhs._dir, tolerance) && 
+                rhs._pos.equals(_pos + _dir, tolerance)
+           );
 }
 
 OSG_END_NAMESPACE

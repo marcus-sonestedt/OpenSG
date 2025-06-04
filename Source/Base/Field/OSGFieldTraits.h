@@ -225,7 +225,7 @@ struct FieldTraitsVecTemplateBase : public FieldTraitsTemplateBase<ValueT,
     typedef FieldTraitsVecTemplateBase<ValueT,
                                        iNamespace>  Self;
 
-    static const UInt32                            _uiSize = ValueT::_uiSize;
+    static  const    UInt32                        _uiSize  = ValueT::_uiSize;
 
     typedef typename ValueT::ValueType              SingleValueT;
 
@@ -384,13 +384,12 @@ struct FieldTraitsVec1TemplateBase :
     using FieldTraitsVecTemplateBase<ValueT, iNamespace>::getSPName;
     using FieldTraitsVecTemplateBase<ValueT, iNamespace>::getMPName;
     
+    using SingleValueT = typename ValueT::ValueType;
+    using TypeTrait    =          TypeTraits<SingleValueT>;
+
     static void putToStream(const ValueT    &val,
                                   OutStream &str)
     {
-        typedef typename ValueT::ValueType     ValueType;
-
-        typedef          TypeTraits<ValueType> TypeTrait;
-
         TypeTrait::putToStream(val[0], str);
     }
 };
@@ -407,13 +406,12 @@ struct FieldTraitsVec2TemplateBase :
     using FieldTraitsVecTemplateBase<ValueT, iNamespace>::getSPName;
     using FieldTraitsVecTemplateBase<ValueT, iNamespace>::getMPName;
 
+    using SingleValueType = typename ValueT::ValueType;
+    using TypeTrait       =          TypeTraits<SingleValueType>;
+
     static void putToStream(const ValueT    &val,
                                   OutStream &str)
     {
-        typedef typename ValueT::ValueType     ValueType;
-
-        typedef          TypeTraits<ValueType> TypeTrait;
-
         TypeTrait::putToStream(val[0], str);
 
         str << " ";
@@ -432,13 +430,13 @@ struct FieldTraitsVec3TemplateBase :
     public FieldTraitsVecTemplateBase<ValueT,
                                       iNamespace>
 {
+    using SingleValueType = typename ValueT::ValueType;
+
+    using TypeTrait       =          TypeTraits<SingleValueType>;
+
     static void putToStream(const ValueT    &val,
                                   OutStream &str)
     {
-        typedef typename ValueT::ValueType     ValueType;
-
-        typedef          TypeTraits<ValueType> TypeTrait;
-
         TypeTrait::putToStream(val[0], str);
 
         str << " ";
@@ -461,13 +459,13 @@ struct FieldTraitsVec4TemplateBase :
     public FieldTraitsVecTemplateBase<ValueT,
                                       iNamespace>
 {
+    using SingleValueType = typename ValueT::ValueType;
+
+    using TypeTrait       =          TypeTraits<SingleValueType>;
+
     static void putToStream(const ValueT    &val,
                                   OutStream &str)
     {
-        typedef typename ValueT::ValueType     ValueType;
-
-        typedef          TypeTraits<ValueType> TypeTrait;
-
         TypeTrait::putToStream(val[0], str);
 
         str << " ";

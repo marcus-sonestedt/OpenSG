@@ -96,7 +96,12 @@ class OSG_CONTRIBCOMPUTEBASE_DLLMAPPING ComputeShaderAlgorithm :
   protected:
 
     static  UInt32                     _arbComputeShader;
+    static  UInt32                     _arbComputeVariableGroupSize;
+    static  UInt32                     _arbShaderImageLoadStore;
+
     static  UInt32                      FuncIdDispatchCompute;
+    static  UInt32                      FuncIdDispatchComputeGroupSize;
+    static  UInt32                      FuncIdMemoryBarrier;
 
     typedef ComputeShaderAlgorithmBase  Inherited;
 

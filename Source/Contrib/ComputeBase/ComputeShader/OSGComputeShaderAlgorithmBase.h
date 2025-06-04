@@ -66,8 +66,11 @@
 #include "OSGComputeAlgorithm.h" // Parent
 
 #include "OSGTextureImageChunkFields.h" // TextureImages type
+#include "OSGChunkMaterialFields.h"     // ChunkMaterial type
 #include "OSGComputeShaderChunkFields.h" // ComputeShader type
 #include "OSGVecFields.h"               // DispatchConfig type
+#include "OSGSysFields.h"               // UseMemoryBarrier type
+#include "OSGBaseFields.h"              // MemoryBarrier type
 
 #include "OSGComputeShaderAlgorithmFields.h"
 
@@ -97,23 +100,43 @@ class OSG_CONTRIBCOMPUTEBASE_DLLMAPPING ComputeShaderAlgorithmBase : public Comp
     enum
     {
         TextureImagesFieldId = Inherited::NextFieldId,
-        ComputeShaderFieldId = TextureImagesFieldId + 1,
+        ChunkMaterialFieldId = TextureImagesFieldId + 1,
+        ComputeShaderFieldId = ChunkMaterialFieldId + 1,
         DispatchConfigFieldId = ComputeShaderFieldId + 1,
-        NextFieldId = DispatchConfigFieldId + 1
+        WorkGroupSizeFieldId = DispatchConfigFieldId + 1,
+        UseMemoryBarrierFieldId = WorkGroupSizeFieldId + 1,
+        UseVariableWorkGroupSizeFieldId = UseMemoryBarrierFieldId + 1,
+        MemoryBarrierFieldId = UseVariableWorkGroupSizeFieldId + 1,
+        NextFieldId = MemoryBarrierFieldId + 1
     };
 
     static const OSG::BitVector TextureImagesFieldMask =
         (TypeTraits<BitVector>::One << TextureImagesFieldId);
+    static const OSG::BitVector ChunkMaterialFieldMask =
+        (TypeTraits<BitVector>::One << ChunkMaterialFieldId);
     static const OSG::BitVector ComputeShaderFieldMask =
         (TypeTraits<BitVector>::One << ComputeShaderFieldId);
     static const OSG::BitVector DispatchConfigFieldMask =
         (TypeTraits<BitVector>::One << DispatchConfigFieldId);
+    static const OSG::BitVector WorkGroupSizeFieldMask =
+        (TypeTraits<BitVector>::One << WorkGroupSizeFieldId);
+    static const OSG::BitVector UseMemoryBarrierFieldMask =
+        (TypeTraits<BitVector>::One << UseMemoryBarrierFieldId);
+    static const OSG::BitVector UseVariableWorkGroupSizeFieldMask =
+        (TypeTraits<BitVector>::One << UseVariableWorkGroupSizeFieldId);
+    static const OSG::BitVector MemoryBarrierFieldMask =
+        (TypeTraits<BitVector>::One << MemoryBarrierFieldId);
     static const OSG::BitVector NextFieldMask =
         (TypeTraits<BitVector>::One << NextFieldId);
         
     typedef MFUnrecTextureImageChunkPtr MFTextureImagesType;
+    typedef SFUnrecChunkMaterialPtr SFChunkMaterialType;
     typedef SFUnrecComputeShaderChunkPtr SFComputeShaderType;
     typedef SFVec3i           SFDispatchConfigType;
+    typedef SFVec3i           SFWorkGroupSizeType;
+    typedef SFBool            SFUseMemoryBarrierType;
+    typedef SFBool            SFUseVariableWorkGroupSizeType;
+    typedef SFGLenum          SFMemoryBarrierType;
 
     /*---------------------------------------------------------------------*/
     /*! \name                    Class Get                                 */
@@ -140,27 +163,60 @@ class OSG_CONTRIBCOMPUTEBASE_DLLMAPPING ComputeShaderAlgorithmBase : public Comp
 
             const MFUnrecTextureImageChunkPtr *getMFTextureImages  (void) const;
                   MFUnrecTextureImageChunkPtr *editMFTextureImages  (void);
+            const SFUnrecChunkMaterialPtr *getSFChunkMaterial  (void) const;
+                  SFUnrecChunkMaterialPtr *editSFChunkMaterial  (void);
             const SFUnrecComputeShaderChunkPtr *getSFComputeShader  (void) const;
                   SFUnrecComputeShaderChunkPtr *editSFComputeShader  (void);
 
                   SFVec3i             *editSFDispatchConfig (void);
             const SFVec3i             *getSFDispatchConfig  (void) const;
 
+                  SFVec3i             *editSFWorkGroupSize  (void);
+            const SFVec3i             *getSFWorkGroupSize   (void) const;
+
+                  SFBool              *editSFUseMemoryBarrier(void);
+            const SFBool              *getSFUseMemoryBarrier (void) const;
+
+                  SFBool              *editSFUseVariableWorkGroupSize(void);
+            const SFBool              *getSFUseVariableWorkGroupSize (void) const;
+
+                  SFGLenum            *editSFMemoryBarrier  (void);
+            const SFGLenum            *getSFMemoryBarrier   (void) const;
+
 
                   TextureImageChunk * getTextureImages  (const UInt32 index) const;
+
+                  ChunkMaterial * getChunkMaterial  (void) const;
 
                   ComputeShaderChunk * getComputeShader  (void) const;
 
                   Vec3i               &editDispatchConfig (void);
             const Vec3i               &getDispatchConfig  (void) const;
 
+                  Vec3i               &editWorkGroupSize  (void);
+            const Vec3i               &getWorkGroupSize   (void) const;
+
+                  bool                &editUseMemoryBarrier(void);
+                  bool                 getUseMemoryBarrier (void) const;
+
+                  bool                &editUseVariableWorkGroupSize(void);
+                  bool                 getUseVariableWorkGroupSize (void) const;
+
+                  GLenum              &editMemoryBarrier  (void);
+            const GLenum              &getMemoryBarrier   (void) const;
+
     /*! \}                                                                 */
     /*---------------------------------------------------------------------*/
     /*! \name                    Field Set                                 */
     /*! \{                                                                 */
 
+            void setChunkMaterial  (ChunkMaterial * const value);
             void setComputeShader  (ComputeShaderChunk * const value);
             void setDispatchConfig (const Vec3i &value);
+            void setWorkGroupSize  (const Vec3i &value);
+            void setUseMemoryBarrier(const bool value);
+            void setUseVariableWorkGroupSize(const bool value);
+            void setMemoryBarrier  (const GLenum &value);
 
     /*! \}                                                                 */
     /*---------------------------------------------------------------------*/
@@ -232,8 +288,13 @@ class OSG_CONTRIBCOMPUTEBASE_DLLMAPPING ComputeShaderAlgorithmBase : public Comp
     /*! \{                                                                 */
 
     MFUnrecTextureImageChunkPtr _mfTextureImages;
+    SFUnrecChunkMaterialPtr _sfChunkMaterial;
     SFUnrecComputeShaderChunkPtr _sfComputeShader;
     SFVec3i           _sfDispatchConfig;
+    SFVec3i           _sfWorkGroupSize;
+    SFBool            _sfUseMemoryBarrier;
+    SFBool            _sfUseVariableWorkGroupSize;
+    SFGLenum          _sfMemoryBarrier;
 
     /*! \}                                                                 */
     /*---------------------------------------------------------------------*/
@@ -264,10 +325,20 @@ class OSG_CONTRIBCOMPUTEBASE_DLLMAPPING ComputeShaderAlgorithmBase : public Comp
 
      GetFieldHandlePtr  getHandleTextureImages   (void) const;
      EditFieldHandlePtr editHandleTextureImages  (void);
+     GetFieldHandlePtr  getHandleChunkMaterial   (void) const;
+     EditFieldHandlePtr editHandleChunkMaterial  (void);
      GetFieldHandlePtr  getHandleComputeShader   (void) const;
      EditFieldHandlePtr editHandleComputeShader  (void);
      GetFieldHandlePtr  getHandleDispatchConfig  (void) const;
      EditFieldHandlePtr editHandleDispatchConfig (void);
+     GetFieldHandlePtr  getHandleWorkGroupSize   (void) const;
+     EditFieldHandlePtr editHandleWorkGroupSize  (void);
+     GetFieldHandlePtr  getHandleUseMemoryBarrier (void) const;
+     EditFieldHandlePtr editHandleUseMemoryBarrier(void);
+     GetFieldHandlePtr  getHandleUseVariableWorkGroupSize (void) const;
+     EditFieldHandlePtr editHandleUseVariableWorkGroupSize(void);
+     GetFieldHandlePtr  getHandleMemoryBarrier   (void) const;
+     EditFieldHandlePtr editHandleMemoryBarrier  (void);
 
     /*! \}                                                                 */
     /*---------------------------------------------------------------------*/

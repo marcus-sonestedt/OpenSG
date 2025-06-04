@@ -112,7 +112,7 @@ OSG_BEGIN_NAMESPACE
 #if !defined(OSG_DO_DOC) || defined(OSG_DOC_DEV)
 PointerType FieldTraits<UniformBufferObjStd140Chunk *, nsOSG>::_type(
     "UniformBufferObjStd140ChunkPtr", 
-    "StateChunkPtr", 
+    "UniformBufferObjBaseChunkPtr", 
     UniformBufferObjStd140Chunk::getClassType(),
     nsOSG);
 #endif
@@ -186,14 +186,15 @@ UniformBufferObjStd140ChunkBase::TypeObject UniformBufferObjStd140ChunkBase::_ty
     reinterpret_cast<PrototypeCreateF>(&UniformBufferObjStd140ChunkBase::createEmptyLocal),
     reinterpret_cast<InitContainerF>(&UniformBufferObjStd140Chunk::initMethod),
     reinterpret_cast<ExitContainerF>(&UniformBufferObjStd140Chunk::exitMethod),
-    reinterpret_cast<InitalInsertDescFunc>(&UniformBufferObjStd140Chunk::classDescInserter),
+    reinterpret_cast<InitalInsertDescFunc>(
+        reinterpret_cast<void *>(&UniformBufferObjStd140Chunk::classDescInserter)),
     false,
     0,
     "<?xml version=\"1.0\"?>\n"
     "\n"
     "<FieldContainer\n"
     "    name=\"UniformBufferObjStd140Chunk\"\n"
-    "    parent=\"StateChunk\"\n"
+    "    parent=\"UniformBufferObjBaseChunk\"\n"
     "    library=\"System\"\n"
     "    pointerfieldtypes=\"both\"\n"
     "    structure=\"concrete\"\n"
